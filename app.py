@@ -1,5 +1,6 @@
 import json
 import re
+from pathlib import Path
 
 import joblib
 import pandas as pd
@@ -13,7 +14,11 @@ MAX_VULNS = 40  # limite para que la demo sea rapida
 
 @st.cache_resource
 def cargar_modelo():
-    return joblib.load("vulnerability_model.joblib")
+    ruta = Path(__file__).parent / "vulnerability_model.joblib"
+    if not ruta.exists():
+        st.error("No se encontró 'vulnerability_model.joblib'. Súbelo al repositorio junto a app.py.")
+        st.stop()
+    return joblib.load(ruta)
 
 
 def parsear_url(url):
